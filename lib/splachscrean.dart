@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:e_commerce_app/category/Authentication/view/loginscrean.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Splachscrean extends StatefulWidget {
   const Splachscrean({super.key});
@@ -28,7 +27,7 @@ class _SplachscreanState extends State<Splachscrean> {
   Widget build(BuildContext context) {
     return  Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/splach.jpg"),
             fit: BoxFit.cover,
