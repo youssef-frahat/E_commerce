@@ -1,41 +1,37 @@
 import 'dart:async';
-
 import 'package:e_commerce_app/category/Authentication/view/loginscrean.dart';
+import 'package:e_commerce_app/splash/onbording.dart';
 import 'package:flutter/material.dart';
 
-class Splachscrean extends StatefulWidget {
-  const Splachscrean({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<Splachscrean> createState() => _SplachscreanState();
-  
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-
-class _SplachscreanState extends State<Splachscrean> {
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Loginscrean()),
+        MaterialPageRoute(builder: (context) => const Boarding()),
       );
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/splach.jpg"),
+            image: AssetImage("assets/image/splash.jpg"),
             fit: BoxFit.cover,
-          )
+          ),
         ),
-
-        
-      )
+      ),
     );
   }
 }
