@@ -63,7 +63,7 @@ class Boarding extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () =>
-                          navigatepush(const Loginscrean(), context),
+                          navigatepush( LoginScreen(), context),
                     ),
                     const SizedBox(height: 20),
                     CustomButton(
