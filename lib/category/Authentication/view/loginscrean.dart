@@ -1,15 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/auth_cubit.dart';
+import '../../../customs/custom_button.dart';
 import '../../home/view/home_screen.dart';
 import '../model-view/auth_state.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  bool _obscureText = true;
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserCredentials();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  void _loadUserCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      emailController.text = prefs.getString('email') ?? '';
+      passwordController.text = prefs.getString('password') ?? '';
+      _rememberMe = prefs.getBool('rememberMe') ?? false;
+    });
+  }
+
+  void _saveUserCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_rememberMe) {
+      await prefs.setString('email', emailController.text);
+      await prefs.setString('password', passwordController.text);
+      await prefs.setBool('rememberMe', _rememberMe);
+    } else {
+      await prefs.remove('email');
+      await prefs.remove('password');
+      await prefs.remove('rememberMe');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,32 +76,6 @@ class LoginScreen extends StatelessWidget {
                     'Welcome Back',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 40),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.login),
-                    label: const Text('Login with Google'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 50),
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.facebook),
-                    label: const Text('Login with Facebook'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 50),
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text('OR'),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: emailController,
@@ -76,11 +94,18 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.visibility_off),
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: _togglePasswordVisibility,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -88,6 +113,20 @@ class LoginScreen extends StatelessWidget {
                       }
                       return null;
                     },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value!;
+                          });
+                        },
+                      ),
+                      const Text('Remember Me'),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   BlocConsumer<AuthCubit, AuthStates>(
@@ -98,9 +137,11 @@ class LoginScreen extends StatelessWidget {
                               content: Text("Login failed. Please try again.")),
                         );
                       } else if (state is LoginSuccessState) {
+                        _saveUserCredentials();
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const HomeScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()),
                         );
                       }
                     },
@@ -108,7 +149,13 @@ class LoginScreen extends StatelessWidget {
                       if (state is LoginLoadingState) {
                         return const Center(child: CircularProgressIndicator());
                       } else {
-                        return ElevatedButton(
+                        return CustomButton(
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          width: double.infinity,
+                          height: 50,
                           onPressed: () {
                             if (formkey.currentState!.validate()) {
                               BlocProvider.of<AuthCubit>(context).loginState(
@@ -117,14 +164,6 @@ class LoginScreen extends StatelessWidget {
                               );
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 160, 83, 1),
-                          ),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
                         );
                       }
                     },
