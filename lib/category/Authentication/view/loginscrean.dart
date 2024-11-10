@@ -94,13 +94,13 @@ class LoginScreen extends StatelessWidget {
                     listener: (context, state) {
                       if (state is LoginErrorState) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content: Text("Login failed. Please try again.")),
                         );
                       } else if (state is LoginSuccessState) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => const HomeScreen()),
                         );
                       }
                     },

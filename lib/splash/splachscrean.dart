@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:e_commerce_app/category/Authentication/view/loginscrean.dart';
 import 'package:e_commerce_app/splash/onbording.dart';
 import 'package:flutter/material.dart';
 

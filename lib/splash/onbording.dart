@@ -32,11 +32,11 @@ class Boarding extends StatelessWidget {
           child: Column(
             children: [
               const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       "mosha store",
                       style: TextStyle(
                         color: Colors.white,
@@ -44,8 +44,8 @@ class Boarding extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const Text(
+                    SizedBox(height: 5),
+                    Text(
                       "welcome to our store",
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
