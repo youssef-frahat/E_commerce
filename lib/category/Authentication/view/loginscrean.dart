@@ -8,7 +8,7 @@ import '../../home/view/home_screen.dart';
 import '../model-view/auth_state.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -150,10 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         return const Center(child: CircularProgressIndicator());
                       } else {
                         return CustomButton(
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
                           width: double.infinity,
                           height: 50,
                           onPressed: () {
@@ -164,6 +160,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             }
                           },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         );
                       }
                     },
